@@ -1,1 +1,120 @@
 
+
+<!DOCTYPE html>
+<html lang="ur" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>میرا حساب | Mera Hisab</title>
+  <style>
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: Tahoma, Arial, sans-serif;
+      background: #f3f7f5;
+      color: #17352c;
+    }
+    header {
+      background: #116149;
+      color: white;
+      text-align: center;
+      padding: 28px 16px;
+    }
+    header h1 { margin: 0 0 10px; font-size: 34px; }
+    header p { margin: 0; line-height: 1.8; }
+    main {
+      max-width: 760px;
+      margin: 28px auto;
+      padding: 0 16px;
+    }
+    .card {
+      background: white;
+      border-radius: 16px;
+      padding: 22px;
+      margin-bottom: 18px;
+      box-shadow: 0 4px 18px #17352c12;
+    }
+    h2 { margin-top: 0; font-size: 22px; }
+    .actions {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+      gap: 12px;
+    }
+    button {
+      border: 0;
+      border-radius: 10px;
+      padding: 14px;
+      font-size: 16px;
+      font-family: inherit;
+      cursor: pointer;
+      background: #116149;
+      color: white;
+    }
+    button.secondary {
+      background: #e3f1eb;
+      color: #116149;
+      border: 1px solid #b7d9c9;
+    }
+    .notice {
+      background: #fff7df;
+      border-right: 4px solid #d7a72e;
+      padding: 14px;
+      border-radius: 8px;
+      line-height: 1.8;
+      font-size: 14px;
+    }
+    footer {
+      text-align: center;
+      padding: 24px;
+      color: #60776d;
+      font-size: 13px;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>میرا حساب</h1>
+    <p>آپ کے کاروبار کے ادھار کا آسان حساب</p>
+    <p>Mera Hisab — Your Digital Udhar Register</p>
+  </header>
+
+  <main>
+    <section class="card">
+      <h2>خوش آمدید!</h2>
+      <p>اپنے کاروبار کا ادھار، وصولیاں اور بقایا حساب منظم کرنے کے لیے ایک آسان ڈیجیٹل نظام۔</p>
+      <div class="actions">
+        <button onclick="showMessage('دکاندار کا اکاؤنٹ بنانے کی سہولت اگلے مرحلے میں شامل ہوگی۔')">
+          دکاندار
+        </button>
+        <button class="secondary" onclick="showMessage('گاہک کا اکاؤنٹ بنانے کی سہولت اگلے مرحلے میں شامل ہوگی۔')">
+          گاہک
+        </button>
+      </div>
+    </section>
+
+    <section class="card">
+      <h2>میرا حساب آپ کے لیے</h2>
+      <p>✓ ادھار کا ریکارڈ</p>
+      <p>✓ وصول شدہ رقم کی تفصیل</p>
+      <p>✓ بقایا رقم کا حساب</p>
+      <p>✓ اردو اور انگریزی کے لیے منصوبہ</p>
+    </section>
+
+    <section class="card">
+      <h2>ہمارا مقصد</h2>
+      <p>پاکستان کے دکانداروں اور گاہکوں کے لیے حساب کتاب کو آسان، واضح اور منظم بنانا۔</p>
+      <div class="notice">
+        یہ ابتدائی نمونہ ہے۔ ابھی اکاؤنٹس، حقیقی ڈیٹا محفوظ کرنے اور WhatsApp یا SMS بھیجنے کی سہولت فعال نہیں۔
+      </div>
+    </section>
+  </main>
+
+  <footer>© 2026 میرا حساب — Mera Hisab</footer>
+
+  <script>
+    function showMessage(message) {
+      alert(message);
+    }
+  </script>
+</body>
+</html>
