@@ -187,10 +187,69 @@
 
   <footer>© 2026 میرا حساب — Mera Hisab</footer>
 
-  <script>
-    function showMessage(message) {
-      alert(message);
+ 
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script>
+  const SUPABASE_URL = "https://lsjafuxasaijybhbopjf.supabase.co";
+    const SUPABASE_KEY = "sb_publishable_l0Y4PJksE_y9Y0ttNMSA1Q_W8XVxoAS";
+    supabaseClient = window.supabase.createClient(
+    SUPABASE_URL,
+    SUPABASE_KEY
+  );
+
+  const registerForm = document.getElementById("registerForm");
+  const registerMessage = document.getElementById("registerMessage");
+
+  registerForm.addEventListener("submit", async function (event) {
+    event.preventDefault();
+
+    const ownerName = document.getElementById("ownerName").value.trim();
+    const shopName = document.getElementById("shopName").value.trim();
+    const mobile = document.getElementById("mobile").value.trim();
+    const email = document.getElementById("email").value.trim();
+    const password = document.getElementById("password").value;
+
+    const submitButton = registerForm.querySelector(
+      'button[type="submit"]'
+    );
+
+    submitButton.disabled = true;
+    registerMessage.textContent = "اکاؤنٹ بنایا جا رہا ہے، انتظار کریں۔";
+
+    try {
+      const { data, error } = await supabaseClient.auth.signUp({
+        email: email,
+        password: password,
+        options: {
+          data: {
+            owner_name: ownerName,
+            shop_name: shopName,
+            mobile: mobile
+          }
+        }
+      });
+
+      if (error) throw error;
+
+      if (data.user && !data.session) {
+        registerMessage.textContent =
+          "اکاؤنٹ کی درخواست کامیاب ہے۔ براہ کرم اپنی ای میل کھول کر تصدیق کریں۔";
+      } else {
+        registerMessage.textContent =
+          "اکاؤنٹ بن گیا ہے۔ اب اگلے مرحلے میں پروفائل مکمل کریں گے۔";
+      }
+
+      registerForm.reset();
+    } catch (error) {
+      registerMessage.textContent =
+        "اکاؤنٹ نہیں بن سکا: " + error.message;
+    } finally {
+      submitButton.disabled = false;
     }
-  </script>
+  });
+</script>
+</body>
+</html>
+
 </body>
 </html>
