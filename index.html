@@ -7,6 +7,54 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>میرا حساب | Mera Hisab</title>
   <style>
+    /* Vendor Registration Form */
+    #register form {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 14px;
+      direction: rtl;
+      margin-top: 20px;
+    }
+
+    #register label {
+      display: block;
+      font-weight: bold;
+      align-self: end;
+    }
+
+    #register input {
+      width: 100%;
+      min-width: 0;
+      padding: 12px;
+      border: 1px solid #cbd5d0;
+      border-radius: 8px;
+      font-size: 16px;
+      background: #fff;
+    }
+
+    #register button {
+      grid-column: 1 / -1;
+      width: 100%;
+      padding: 13px;
+      border: none;
+      border-radius: 8px;
+      background: #116149;
+      color: white;
+      font-size: 17px;
+      font-weight: bold;
+      cursor: pointer;
+    }
+
+    #register button:hover {
+      background: #0d4d39;
+    }
+
+    @media (max-width: 600px) {
+      #register form {
+        grid-template-columns: 1fr;
+      }
+    }
+
     * { box-sizing: border-box; }
     body {
       margin: 0;
