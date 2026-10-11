@@ -318,6 +318,23 @@
 
       loginMessage.textContent = "لاگ اِن کامیاب ہو گیا ہے۔";
 
+      document.getElementById("register").hidden = true;
+      document.getElementById("login").hidden = true;
+      document.getElementById("dashboard").hidden = false;
+
+      const { data: userData } = await supabaseClient.auth.getUser();
+
+      const ownerName = userData.user?.user_metadata?.owner_name;
+      const shopName = userData.user?.user_metadata?.shop_name;
+
+      const dashboardHeading = document.querySelector("#dashboard h2");
+      dashboardHeading.textContent =
+        shopName ? shopName + " — ڈیش بورڈ" : "دکاندار کا ڈیش بورڈ";
+
+      const welcomeText = document.querySelector("#dashboard > p");
+      welcomeText.textContent =
+        ownerName ? "خوش آمدید، " + ownerName + " صاحب!" : "میرا حساب میں خوش آمدید!";
+
       // اگلے مرحلے میں یہاں دکاندار کا ڈیش بورڈ کھولیں گے۔
     } catch (error) {
       loginMessage.textContent =
