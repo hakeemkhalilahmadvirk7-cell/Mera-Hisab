@@ -344,6 +344,29 @@
     }
   });
 
+  const logoutButton = document.getElementById("logoutButton");
+
+  logoutButton.addEventListener("click", async function () {
+    logoutButton.disabled = true;
+
+    try {
+      const { error } = await supabaseClient.auth.signOut();
+
+      if (error) throw error;
+
+      document.getElementById("dashboard").hidden = true;
+      document.getElementById("login").hidden = false;
+
+      loginForm.reset();
+      loginMessage.textContent = "آپ کامیابی سے لاگ آؤٹ ہو گئے ہیں۔";
+    } catch (error) {
+      loginMessage.textContent =
+        "لاگ آؤٹ نہیں ہو سکا: " + error.message;
+    } finally {
+      logoutButton.disabled = false;
+    }
+  });
+
 </script>
 </body>
 </html>
