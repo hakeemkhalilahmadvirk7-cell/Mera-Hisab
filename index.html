@@ -177,6 +177,23 @@
       <p id="registerMessage" role="status"></p>
     </section>
 
+    <section class="card" id="login">
+      <h2>دکاندار لاگ اِن کریں</h2>
+      <p>اپنے اکاؤنٹ میں داخل ہونے کے لیے ای میل اور پاس ورڈ درج کریں۔</p>
+
+      <form id="loginForm">
+        <label for="loginEmail">ای میل</label>
+        <input type="email" id="loginEmail" name="loginEmail" required>
+
+        <label for="loginPassword">پاس ورڈ</label>
+        <input type="password" id="loginPassword" name="loginPassword" required>
+
+        <button type="submit">لاگ اِن کریں</button>
+      </form>
+
+      <p id="loginMessage" role="status"></p>
+    </section>
+
       <h2>ہمارا مقصد</h2>
       <p>پاکستان کے دکانداروں اور گاہکوں کے لیے حساب کتاب کو آسان، واضح اور منظم بنانا۔</p>
       <div class="notice">
@@ -247,6 +264,39 @@
       submitButton.disabled = false;
     }
   });
+  
+  const loginForm = document.getElementById("loginForm");
+  const loginMessage = document.getElementById("loginMessage");
+
+  loginForm.addEventListener("submit", async function (event) {
+    event.preventDefault();
+
+    const email = document.getElementById("loginEmail").value.trim();
+    const password = document.getElementById("loginPassword").value;
+    const submitButton = loginForm.querySelector('button[type="submit"]');
+
+    submitButton.disabled = true;
+    loginMessage.textContent = "لاگ اِن کیا جا رہا ہے، انتظار کریں۔";
+
+    try {
+      const { data, error } = await supabaseClient.auth.signInWithPassword({
+        email: email,
+        password: password
+      });
+
+      if (error) throw error;
+
+      loginMessage.textContent = "لاگ اِن کامیاب ہو گیا ہے۔";
+
+      // اگلے مرحلے میں یہاں دکاندار کا ڈیش بورڈ کھولیں گے۔
+    } catch (error) {
+      loginMessage.textContent =
+        "لاگ اِن نہیں ہو سکا: " + error.message;
+    } finally {
+      submitButton.disabled = false;
+    }
+  });
+
 </script>
 </body>
 </html>
