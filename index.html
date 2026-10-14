@@ -1,5 +1,6 @@
 
 
+
 <!DOCTYPE html>
 <html lang="ur" dir="rtl">
 <head>
@@ -77,7 +78,7 @@
     button.secondary { background: #e3f1eb; color: #116149; border: 1px solid #b7d9c9; }
     button.calc-btn { background: #f39c12; color: white; }
     button.pdf-btn { background: #e74c3c; color: white; padding: 5px 8px; font-size: 11px; }
-    button.whatsapp-btn { background: #25d366; color: white; }
+    button.whatsapp-btn { background: #25d366; color: white; padding: 5px 8px; font-size: 11px; font-weight: bold; }
 
     .dashboard-summary {
       display: grid;
@@ -132,6 +133,18 @@
     table { width: 100%; border-collapse: collapse; font-size: 13px; }
     th, td { padding: 9px; border-bottom: 1px solid #e1ebe6; text-align: right; }
     th { background: #f3f7f5; color: #116149; }
+    .customer-row { cursor: pointer; transition: background 0.2s; }
+    .customer-row:hover { background: #eef9f5; }
+
+    .back-btn {
+      display: inline-block;
+      margin-bottom: 15px;
+      color: #116149;
+      text-decoration: none;
+      font-weight: bold;
+      font-size: 14px;
+      cursor: pointer;
+    }
   </style>
 </head>
 <body>
@@ -164,7 +177,7 @@
       <p id="authMsg" style="font-size: 12px; font-weight: bold; margin-top: 8px;"></p>
     </section>
 
-    <!-- ڈیش بورڈ (لاگ ان کے بعد ظاہر ہوگا) -->
+    <!-- مین ڈیش بورڈ (تمام گاہکوں کی لسٹ) -->
     <section class="card" id="dashboardCard" hidden>
       <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
         <h2 id="shopTitle" style="margin:0;">دکاندار کا ڈیش بورڈ</h2>
@@ -181,43 +194,98 @@
 
       <hr style="margin: 15px 0;">
 
-      <!-- نیا گاہک درج کرنے کا فارم -->
+      <!-- نیا گاہک شامل کرنے کا فارم -->
       <h3>نیا گاہک شامل کریں</h3>
-      <form id="customerForm">
+      <form id="addCustomerForm">
         <div>
           <label>گاہک کا نام</label>
-          <input type="text" id="cName" required placeholder="مثلاً: احمد خان">
+          <input type="text" id="newCName" required placeholder="مثلاً: احمد خان">
         </div>
         <div>
-          <label>موبائل نمبر (واٹس ایپ کے لیے)</label>
-          <input type="tel" id="cPhone" required placeholder="03001234567">
-        </div>
-        <div>
-          <label>رقم (روپے)</label>
-          <input type="number" id="cAmount" required placeholder="0">
-        </div>
-        <div>
-          <label>قسم</label>
-          <select id="cType">
-            <option value="credit">ادھار دیا (+)</option>
-            <option value="payment">رقم وصول کی (-)</option>
-          </select>
+          <label>موبائل / واٹس ایپ نمبر</label>
+          <input type="tel" id="newCPhone" required placeholder="03001234567">
         </div>
         <div class="full-width">
-          <button type="submit">محفوظ کریں</button>
+          <button type="submit">نیا گاہک شامل کریں</button>
         </div>
       </form>
 
       <hr style="margin: 15px 0;">
 
       <h3>گاہکوں کا کھاتہ (Ledger)</h3>
+      <p style="font-size: 12px; color: #60776d; margin-top: -5px;">کسی بھی گاہک کے نام پر کلک کر کے اس کا کھاتہ کھولیں اور نئی انٹری ڈالیں:</p>
       <div style="overflow-x:auto;">
         <table>
           <thead>
-            <tr><th>نام</th><th>فون</th><th>بقایا</th><th>PDF رسید</th></tr>
+            <tr>
+              <th>نام</th>
+              <th>فون</th>
+              <th>بقایا</th>
+              <th>ایکشنز</th>
+            </tr>
           </thead>
           <tbody id="customerTableBody">
             <tr><td colspan="4" style="text-align:center; color:#60776d;">کوئی گاہک موجود نہیں۔</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- کسی ایک گاہک کا خصوصی کھاتہ صفحہ (Single Customer View) -->
+    <section class="card" id="singleCustomerCard" hidden>
+      <span class="back-btn" onclick="closeSingleCustomer()">← واپس تمام گاہکوں پر جائیں</span>
+      
+      <div style="display: flex; justify-content: space-between; align-items: flex-start; flex-wrap: wrap;">
+        <div>
+          <h2 id="selectedCName" style="margin-bottom: 2px;">گاہک کا نام</h2>
+          <p id="selectedCPhone" style="margin:0; font-size: 13px; color: #60776d;">فون: ---</p>
+        </div>
+        <div class="summary-box" style="background: #fff3f3; border: 1px solid #ffcdd2;">
+          <h4 style="color: #b33939; margin:0;">کل بقایا رقم</h4>
+          <p id="selectedCBalance" style="color: #b33939; font-size: 18px;">0 روپے</p>
+        </div>
+      </div>
+
+      <hr style="margin: 15px 0;">
+
+      <!-- اس مخصوص گاہک کے لیے نئی انٹری کا فارم -->
+      <h3>اس کھاتے میں نئی انٹری درج کریں</h3>
+      <form id="addTxnForm">
+        <div>
+          <label>رقم (روپے)</label>
+          <input type="number" id="txnAmount" required placeholder="0">
+        </div>
+        <div>
+          <label>قسم</label>
+          <select id="txnType">
+            <option value="credit">ادھار دیا (+)</option>
+            <option value="payment">رقم وصول کی (-)</option>
+          </select>
+        </div>
+        <div class="full-width">
+          <label>تفصیل / سامان کا نام (اختیاری)</label>
+          <input type="text" id="txnNote" placeholder="مثلاً: چینی، راشن یا نقد وصولی">
+        </div>
+        <div class="full-width">
+          <button type="submit">انٹری محفوظ کریں اور واٹس ایپ الرٹ بھیجیں</button>
+        </div>
+      </form>
+
+      <hr style="margin: 20px 0;">
+
+      <h3>اس گاہک کی پرانی ہسٹری (تفصیلا کھاتہ)</h3>
+      <div style="overflow-x:auto;">
+        <table>
+          <thead>
+            <tr>
+              <th>تاریخ اور وقت</th>
+              <th>تفصیل</th>
+              <th>ادھار (+)</th>
+              <th>وصولی (-)</th>
+            </tr>
+          </thead>
+          <tbody id="txnHistoryBody">
+            <tr><td colspan="4" style="text-align:center;">کوئی ہسٹری موجود نہیں۔</td></tr>
           </tbody>
         </table>
       </div>
@@ -249,6 +317,7 @@
     const supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 
     let currentUser = null;
+    let activeCustomerIndex = null; // جو گاہک کھولا ہوا ہے
 
     // سیشن چیک کریں
     async function checkAuth() {
@@ -302,41 +371,38 @@
       await supabaseClient.auth.signOut();
       currentUser = null;
       document.getElementById('dashboardCard').hidden = true;
+      document.getElementById('singleCustomerCard').hidden = true;
       document.getElementById('loginCard').hidden = false;
     });
 
     function showDashboard() {
       document.getElementById('loginCard').hidden = true;
+      document.getElementById('singleCustomerCard').hidden = true;
       document.getElementById('dashboardCard').hidden = false;
       document.getElementById('shopTitle').textContent = currentUser.email + " — ڈیش بورڈ";
       loadCustomers();
     }
 
-    // گاہک محفوظ کرنا
-    document.getElementById('customerForm').addEventListener('submit', function(e) {
+    // نیا گاہک شامل کرنا
+    document.getElementById('addCustomerForm').addEventListener('submit', function(e) {
       e.preventDefault();
-      const name = document.getElementById('cName').value.trim();
-      const phone = document.getElementById('cPhone').value.trim();
-      const amount = parseFloat(document.getElementById('cAmount').value) || 0;
-      const type = document.getElementById('cType').value;
+      const name = document.getElementById('newCName').value.trim();
+      const phone = document.getElementById('newCPhone').value.trim();
 
-      let netAmount = type === 'credit' ? amount : -amount;
       let db = JSON.parse(localStorage.getItem('khata_' + currentUser.id) || '[]');
-
+      
+      // چیک کریں کیا گاہک موجود ہے
       let existing = db.find(c => c.name === name);
-      if(existing) {
-        existing.balance += netAmount;
-        existing.phone = phone;
-      } else {
-        db.push({ name, phone, balance: netAmount });
+      if(!existing) {
+        db.push({ name, phone, balance: 0, history: [] });
+        localStorage.setItem('khata_' + currentUser.id, JSON.stringify(db));
       }
 
-      localStorage.setItem('khata_' + currentUser.id, JSON.stringify(db));
-      document.getElementById('customerForm').reset();
+      document.getElementById('addCustomerForm').reset();
       loadCustomers();
     });
 
-    // گاہک لوڈ کرنا
+    // تمام گاہکوں کو ٹیبل میں دکھانا
     function loadCustomers() {
       let db = JSON.parse(localStorage.getItem('khata_' + currentUser.id) || '[]');
       const tbody = document.getElementById('customerTableBody');
@@ -353,14 +419,18 @@
         return;
       }
 
-      db.forEach(c => {
+      db.forEach((c, index) => {
         totalBal += c.balance;
         let tr = document.createElement('tr');
+        tr.className = "customer-row";
         tr.innerHTML = `
-          <td>${c.name}</td>
-          <td>${c.phone}</td>
-          <td style="color: ${c.balance > 0 ? '#b33939' : '#27ae60'}; font-weight: bold;">${c.balance} روپے</td>
-          <td><button class="pdf-btn" onclick="generatePDF('${c.name}', ${c.balance})">PDF</button></td>
+          <td onclick="openSingleCustomer(${index})"><strong>${c.name}</strong></td>
+          <td onclick="openSingleCustomer(${index})">${c.phone}</td>
+          <td onclick="openSingleCustomer(${index})" style="color: ${c.balance > 0 ? '#b33939' : '#27ae60'}; font-weight: bold;">${c.balance} روپے</td>
+          <td>
+            <button class="whatsapp-btn" onclick="sendWhatsAppMsg('${c.phone}', '${c.name}', 'summary', 0, ${c.balance}); event.stopPropagation();">📱 واٹس ایپ</button>
+            <button class="pdf-btn" onclick="generatePDF('${c.name}', ${c.balance}); event.stopPropagation();">📄 PDF</button>
+          </td>
         `;
         tbody.appendChild(tr);
       });
@@ -369,7 +439,102 @@
       totalBalEl.textContent = totalBal + " روپے";
     }
 
-    // کیلکولیٹر فنکشنز
+    // کسی ایک گاہک کا خصوصی کھاتہ کھولنا
+    function openSingleCustomer(index) {
+      activeCustomerIndex = index;
+      let db = JSON.parse(localStorage.getItem('khata_' + currentUser.id) || '[]');
+      let customer = db[index];
+
+      document.getElementById('dashboardCard').hidden = true;
+      document.getElementById('singleCustomerCard').hidden = false;
+
+      document.getElementById('selectedCName').textContent = customer.name;
+      document.getElementById('selectedCPhone').textContent = "موبائل: " + customer.phone;
+      document.getElementById('selectedCBalance').textContent = customer.balance + " روپے";
+
+      loadTxnHistory(customer.history || []);
+    }
+
+    function closeSingleCustomer() {
+      document.getElementById('singleCustomerCard').hidden = true;
+      document.getElementById('dashboardCard').hidden = false;
+      loadCustomers();
+    }
+
+    // اس گاہک کے لیے نئی انٹری درج کرنا
+    document.getElementById('addTxnForm').addEventListener('submit', function(e) {
+      e.preventDefault();
+      const amount = parseFloat(document.getElementById('txnAmount').value) || 0;
+      const type = document.getElementById('txnType').value;
+      const note = document.getElementById('txnNote').value.trim() || (type === 'credit' ? 'ادھار سامان' : 'رقم وصولی');
+
+      let db = JSON.parse(localStorage.getItem('khata_' + currentUser.id) || '[]');
+      let customer = db[activeCustomerIndex];
+
+      let netAmount = type === 'credit' ? amount : -amount;
+      customer.balance += netAmount;
+
+      if(!customer.history) customer.history = [];
+      customer.history.push({
+        date: new Date().toLocaleString('ur-PK'),
+        amount: amount,
+        type: type,
+        note: note
+      });
+
+      localStorage.setItem('khata_' + currentUser.id, JSON.stringify(db));
+
+      document.getElementById('addTxnForm').reset();
+      document.getElementById('selectedCBalance').textContent = customer.balance + " روپے";
+      loadTxnHistory(customer.history);
+
+      // واٹس ایپ الرٹ
+      sendWhatsAppMsg(customer.phone, customer.name, type, amount, customer.balance);
+    });
+
+    function loadTxnHistory(history) {
+      const tbody = document.getElementById('txnHistoryBody');
+      tbody.innerHTML = "";
+
+      if(!history || history.length === 0) {
+        tbody.innerHTML = `<tr><td colspan="4" style="text-align:center; color:#60776d;">اس گاہک کی کوئی ہسٹری موجود نہیں۔</td></tr>`;
+        return;
+      }
+
+      history.slice().reverse().forEach(t => {
+        let tr = document.createElement('tr');
+        tr.innerHTML = `
+          <td>${t.date}</td>
+          <td>${t.note}</td>
+          <td style="color: #b33939; font-weight: bold;">${t.type === 'credit' ? t.amount + ' روپے' : '-'}</td>
+          <td style="color: #27ae60; font-weight: bold;">${t.type === 'payment' ? t.amount + ' روپے' : '-'}</td>
+        `;
+        tbody.appendChild(tr);
+      });
+    }
+
+    // WhatsApp میسج
+    function sendWhatsAppMsg(phone, name, type, amount, totalBalance) {
+      let msg = "";
+      if (type === 'credit') {
+        msg = `محترم ${name} صاحب!\nآپ کے کھاتے میں ${amount} روپے کا نیا ادھار درج کیا گیا ہے۔\nآپ کا کل بقایا حساب: ${totalBalance} روپے ہے۔\n\n- شکریہ (میرا حساب)`;
+      } else if (type === 'payment') {
+        msg = `محترم ${name} صاحب!\nآپ کی جانب سے ${amount} روپے وصول ہو گئے ہیں، شکریہ!\nآپ کا بقایا حساب: ${totalBalance} روپے ہے۔\n\n- شکریہ (میرا حساب)`;
+      } else {
+        msg = `محترم ${name} صاحب!\nآپ کا 'میرا حساب' کا موجودہ بقایا واجب الادا حساب ${totalBalance} روپے ہے۔\nلطفاً بروقت ادائیگی کریں۔\n\n- شکریہ (میرا حساب)`;
+      }
+
+      let cleanPhone = phone.replace(/[^0-9]/g, '');
+      if (cleanPhone.startsWith('0')) cleanPhone = '92' + cleanPhone.substring(1);
+
+      let whatsappUrl = `https://wa.me/${cleanPhone}?text=${encodeURIComponent(msg)}`;
+
+      if (type === 'summary' || confirm(`انٹری محفوظ ہو گئی ہے! کیا آپ ${name} کو WhatsApp پر پیغام بھیجنا چاہتے ہیں؟`)) {
+        window.open(whatsappUrl, '_blank');
+      }
+    }
+
+    // کیلکولیٹر
     function toggleCalc() {
       const modal = document.getElementById('calcModal');
       modal.style.display = (modal.style.display === 'flex') ? 'none' : 'flex';
@@ -381,7 +546,7 @@
       catch { document.getElementById('calcDisplay').value = 'Error'; }
     }
 
-    // PDF جنریٹر
+    // PDF
     function generatePDF(name, balance) {
       const element = document.createElement('div');
       element.innerHTML = `
