@@ -5,66 +5,10 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>میرا حساب | Mera Hisab</title>
+  <title>میرا حساب | Mera Hisab — ڈیجیٹل کھاتہ سسٹم</title>
+  <!-- PDF Library -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
   <style>
-    /* Forms & Inputs Styling */
-    form {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 14px;
-      direction: rtl;
-      margin-top: 15px;
-    }
-
-    label {
-      display: block;
-      font-weight: bold;
-      align-self: end;
-      font-size: 14px;
-    }
-
-    input, select {
-      width: 100%;
-      min-width: 0;
-      padding: 12px;
-      border: 1px solid #cbd5d0;
-      border-radius: 8px;
-      font-size: 15px;
-      background: #fff;
-    }
-
-    .full-width {
-      grid-column: 1 / -1;
-    }
-
-    button {
-      border: 0;
-      border-radius: 10px;
-      padding: 12px 16px;
-      font-size: 15px;
-      font-family: inherit;
-      cursor: pointer;
-      background: #116149;
-      color: white;
-      font-weight: bold;
-    }
-
-    button:hover {
-      background: #0d4d39;
-    }
-
-    button.secondary {
-      background: #e3f1eb;
-      color: #116149;
-      border: 1px solid #b7d9c9;
-    }
-
-    @media (max-width: 600px) {
-      form {
-        grid-template-columns: 1fr;
-      }
-    }
-
     * { box-sizing: border-box; }
     body {
       margin: 0;
@@ -76,417 +20,233 @@
       background: #116149;
       color: white;
       text-align: center;
-      padding: 28px 16px;
+      padding: 20px 16px;
     }
-    header h1 { margin: 0 0 10px; font-size: 34px; }
-    header p { margin: 0; line-height: 1.8; }
+    header h1 { margin: 0 0 5px; font-size: 28px; }
+    header p { margin: 0; font-size: 13px; }
     main {
-      max-width: 800px;
-      margin: 28px auto;
+      max-width: 850px;
+      margin: 20px auto;
       padding: 0 16px;
     }
     .card {
       background: white;
-      border-radius: 16px;
-      padding: 22px;
-      margin-bottom: 18px;
-      box-shadow: 0 4px 18px #17352c12;
+      border-radius: 12px;
+      padding: 18px;
+      margin-bottom: 15px;
+      box-shadow: 0 4px 16px #17352c10;
     }
-    h2 { margin-top: 0; font-size: 22px; }
-    h3 { margin-top: 0; font-size: 18px; color: #116149; }
+    h2, h3 { color: #116149; margin-top: 0; }
+    
+    /* AdSense Banner Placeholder */
+    .ad-banner {
+      background: #e9ecef;
+      border: 1px dashed #adb5bd;
+      text-align: center;
+      padding: 10px;
+      margin: 10px 0;
+      font-size: 12px;
+      color: #6c757d;
+    }
+
+    form {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+    }
+    label { font-size: 12px; font-weight: bold; }
+    input, select {
+      width: 100%;
+      padding: 8px;
+      border: 1px solid #cbd5d0;
+      border-radius: 6px;
+      font-size: 13px;
+    }
+    .full-width { grid-column: 1 / -1; }
+
+    button {
+      border: 0;
+      border-radius: 6px;
+      padding: 10px 12px;
+      font-size: 13px;
+      cursor: pointer;
+      background: #116149;
+      color: white;
+      font-weight: bold;
+    }
+    button.secondary { background: #e3f1eb; color: #116149; border: 1px solid #b7d9c9; }
+    button.pdf-btn { background: #e74c3c; color: white; }
+    button.calc-btn { background: #f39c12; color: white; }
 
     .dashboard-summary {
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
-      gap: 12px;
-      margin-top: 15px;
-      margin-bottom: 20px;
+      grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+      gap: 8px;
     }
-
-    /* Table Styling for Customers */
-    .table-container {
-      overflow-x: auto;
-      margin-top: 15px;
-    }
-    table {
-      width: 100%;
-      border-collapse: collapse;
-      text-align: right;
-      font-size: 14px;
-    }
-    th, td {
-      padding: 10px 12px;
-      border-bottom: 1px solid #e1ebe6;
-    }
-    th {
+    .summary-box {
       background: #f3f7f5;
-      color: #116149;
+      padding: 10px;
+      border-radius: 8px;
+      text-align: center;
+    }
+    .summary-box p { margin: 5px 0 0; font-weight: bold; font-size: 15px; }
+
+    /* Modal / Pop-up Calculator */
+    .modal {
+      display: none;
+      position: fixed;
+      top: 0; left: 0; width: 100%; height: 100%;
+      background: rgba(0,0,0,0.5);
+      justify-content: center;
+      align-items: center;
+      z-index: 1000;
+    }
+    .calc-box {
+      background: white;
+      padding: 15px;
+      border-radius: 12px;
+      width: 260px;
+      text-align: center;
+    }
+    .calc-screen {
+      width: 100%;
+      height: 40px;
+      font-size: 18px;
+      text-align: left;
+      margin-bottom: 10px;
+      padding: 5px;
+    }
+    .calc-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 5px;
+    }
+    .calc-grid button {
+      padding: 12px;
+      font-size: 14px;
+      background: #e1ebe6;
+      color: #17352c;
     }
 
-    .notice {
-      background: #fff7df;
-      border-right: 4px solid #d7a72e;
-      padding: 14px;
-      border-radius: 8px;
-      line-height: 1.8;
-      font-size: 14px;
-      margin-top: 15px;
-    }
-    footer {
-      text-align: center;
-      padding: 24px;
-      color: #60776d;
-      font-size: 13px;
-    }
+    table { width: 100%; border-collapse: collapse; font-size: 13px; }
+    th, td { padding: 8px; border-bottom: 1px solid #e1ebe6; text-align: right; }
+    th { background: #f3f7f5; color: #116149; }
   </style>
 </head>
 <body>
+
   <header>
     <h1>میرا حساب</h1>
-    <p>آپ کے کاروبار کے ادھار کا آسان حساب</p>
-    <p>Mera Hisab — Your Digital Udhar Register</p>
+    <p>آپ کے کاروبار کا ڈیجیٹل کھاتہ</p>
   </header>
 
   <main>
-    <!-- تعارفی سیکشن -->
-    <section class="card">
-      <h2>خوش آمدید!</h2>
-      <p>اپنے کاروبار کا ادھار، وصولیاں اور بقایا حساب منظم کرنے کے لیے ایک آسان ڈیجیٹل نظام۔</p>
-    </section>
+    <!-- گوگل ایڈسینس اشتہار کا جگہ -->
+    <div class="ad-banner">گوگل ایڈسینس ایڈ اسپیس (AdSense Banner)</div>
 
-    <!-- دکاندار کا اکاؤنٹ بنانے کا فارم -->
-    <section class="card" id="register">
-      <h2>دکاندار کا اکاؤنٹ بنائیں</h2>
-      <p>میرا حساب پر اپنا اکاؤنٹ بنائیں۔</p>
-
-      <form id="registerForm">
-        <div>
-          <label for="ownerName">دکاندار کا نام</label>
-          <input type="text" id="ownerName" name="ownerName" required>
-        </div>
-        <div>
-          <label for="shopName">دکان کا نام</label>
-          <input type="text" id="shopName" name="shopName" required>
-        </div>
-        <div>
-          <label for="mobile">موبائل نمبر</label>
-          <input type="tel" id="mobile" name="mobile" required>
-        </div>
-        <div>
-          <label for="email">ای میل</label>
-          <input type="email" id="email" name="email" required>
-        </div>
-        <div class="full-width">
-          <label for="password">پاس ورڈ (کم از کم 8 ہندسے)</label>
-          <input type="password" id="password" name="password" minlength="8" required>
-        </div>
-        <div class="full-width">
-          <button type="submit">اکاؤنٹ بنائیں</button>
-        </div>
-      </form>
-      <p id="registerMessage" role="status" style="margin-top: 10px; font-weight: bold;"></p>
-    </section>
-
-    <!-- دکاندار لاگ ان کا فارم -->
-    <section class="card" id="login">
-      <h2>دکاندار لاگ اِن کریں</h2>
-      <p>اپنے اکاؤنٹ میں داخل ہونے کے لیے ای میل اور پاس ورڈ درج کریں۔</p>
-
-      <form id="loginForm">
-        <div>
-          <label for="loginEmail">ای میل</label>
-          <input type="email" id="loginEmail" name="loginEmail" required>
-        </div>
-        <div>
-          <label for="loginPassword">پاس ورڈ</label>
-          <input type="password" id="loginPassword" name="loginPassword" required>
-        </div>
-        <div class="full-width">
-          <button type="submit">لاگ اِن کریں</button>
-        </div>
-      </form>
-      <p id="loginMessage" role="status" style="margin-top: 10px; font-weight: bold;"></p>
-    </section>
-
-    <!-- دکاندار کا ڈیش بورڈ اور گاہکوں کا کھاتہ -->
-    <section class="card" id="dashboard" hidden>
-      <h2>دکاندار کا ڈیش بورڈ</h2>
-      <p>میرا حساب میں خوش آمدید!</p>
-
-      <div class="dashboard-summary">
-        <div class="card" style="margin-bottom:0; box-shadow:none; background:#f3f7f5;">
-          <h3>کل گاہک</h3>
-          <p id="totalCustomers" style="font-size: 20px; font-weight: bold; margin:0;">0</p>
-        </div>
-        <div class="card" style="margin-bottom:0; box-shadow:none; background:#f3f7f5;">
-          <h3>کل بقایا ادھار</h3>
-          <p id="totalBalance" style="font-size: 20px; font-weight: bold; margin:0; color: #b33939;">0 روپے</p>
-        </div>
+    <!-- ڈیش بورڈ -->
+    <section class="card" id="dashboard">
+      <div style="display: flex; justify-content: space-between; align-items: center;">
+        <h2>دکاندار کا ڈیش بورڈ</h2>
+        <button class="calc-btn" onclick="toggleCalc()">🧮 کیلکولیٹر کھولیں</button>
       </div>
 
-      <hr style="border: 0; border-top: 1px solid #e1ebe6; margin: 20px 0;">
+      <div class="dashboard-summary">
+        <div class="summary-box"><h4>کل گاہک</h4><p id="totalCustomers">0</p></div>
+        <div class="summary-box"><h4>کل بقایا</h4><p id="totalBalance" style="color:#b33939;">0 روپے</p></div>
+      </div>
 
-      <!-- نیا گاہک شامل کرنے کا فارم -->
-      <h3>نیا گاہک یا لین دین درج کریں</h3>
-      <form id="customerForm">
-        <div>
-          <label for="customerName">گاہک کا نام</label>
-          <input type="text" id="customerName" required placeholder="مثلاً: احمد خان">
-        </div>
-        <div>
-          <label for="customerPhone">موبائل نمبر (اختتیاری)</label>
-          <input type="tel" id="customerPhone" placeholder="03001234567">
-        </div>
-        <div>
-          <label for="amount">رقم (روپے)</label>
-          <input type="number" id="amount" required placeholder="0">
-        </div>
-        <div>
-          <label for="txnType">قسم</label>
-          <select id="txnType">
-            <option value="credit">ادھار دیا (لینا ہے)</option>
-            <option value="payment">رقم وصول کی (جمع کی)</option>
-          </select>
-        </div>
-        <div class="full-width">
-          <button type="submit">محفوظ کریں</button>
-        </div>
-      </form>
-      <p id="customerMessage" role="status" style="margin-top: 10px; font-weight: bold;"></p>
+      <hr style="margin: 15px 0;">
 
-      <hr style="border: 0; border-top: 1px solid #e1ebe6; margin: 20px 0;">
+      <!-- JazzCash / EasyPaisa ادائیگی کی تفصیلات -->
+      <h3>آن لائن ادائیگی (JazzCash / EasyPaisa)</h3>
+      <div style="background: #eef9f5; padding: 10px; border-radius: 8px; font-size: 13px;">
+        <p style="margin: 3px 0;"><strong>JazzCash:</strong> 03001234567 (نام: محمد علی)</p>
+        <p style="margin: 3px 0;"><strong>EasyPaisa:</strong> 03001234567 (نام: محمد علی)</p>
+      </div>
 
-      <!-- گاہکوں کی لسٹ کا ٹیبل -->
-      <h3>گاہکوں کا کھاتہ (Ledger)</h3>
-      <div class="table-container">
+      <hr style="margin: 15px 0;">
+
+      <h3>گاہکوں کی فہرست</h3>
+      <div style="overflow-x:auto;">
         <table>
           <thead>
-            <tr>
-              <th>گاہک کا نام</th>
-              <th>موبایل نمبر</th>
-              <th>بقایا رقم (روپے)</th>
-            </tr>
+            <tr><th>نام</th><th>فون</th><th>بقایا</th><th>پرنٹ PDF</th></tr>
           </thead>
-          <tbody id="customerTableBody">
-            <tr>
-              <td colspan="3" style="text-align: center; color: #60776d;">ابھی تک کوئی گاہک درج نہیں کیا۔</td>
-            </tr>
+          <tbody id="customerTable">
+            <tr><td colspan="4" style="text-align:center;">کوئی گاہک درج نہیں۔</td></tr>
           </tbody>
         </table>
       </div>
-
-      <button type="button" id="logoutButton" class="secondary" style="margin-top: 25px;">لاگ آؤٹ کریں</button>
     </section>
 
-    <!-- مقصد کا سیکشن -->
-    <section class="card">
-      <h2>ہمارا مقصد</h2>
-      <p>پاکستان کے دکانداروں اور گاہکوں کے لیے حساب کتاب کو آسان، واضح اور منظم بنانا۔</p>
-      <div class="notice">
-        یہ پروجیکٹ Supabase ڈیٹا بیس کے ساتھ منسلک ہے جہاں آپ کا ڈیٹا محفوظ ہو رہا ہے۔
-      </div>
-    </section>
+    <!-- گوگل ایڈسینس اشتہار کا جگہ -->
+    <div class="ad-banner">گوگل ایڈسینس ایڈ اسپیس (Bottom Ad)</div>
   </main>
 
-  <footer>© 2026 میرا حساب — Mera Hisab</footer>
+  <!-- کیلکولیٹر پوپ اپ (Pop-up Modal) -->
+  <div class="modal" id="calcModal">
+    <div class="calc-box">
+      <h3>حساب کتاب کیلکولیٹر</h3>
+      <input type="text" class="calc-screen" id="calcDisplay" readonly>
+      <div class="calc-grid">
+        <button onclick="calcInput('7')">7</button>
+        <button onclick="calcInput('8')">8</button>
+        <button onclick="calcInput('9')">9</button>
+        <button onclick="calcInput('/')">/</button>
+        <button onclick="calcInput('4')">4</button>
+        <button onclick="calcInput('5')">5</button>
+        <button onclick="calcInput('6')">6</button>
+        <button onclick="calcInput('*')">*</button>
+        <button onclick="calcInput('1')">1</button>
+        <button onclick="calcInput('2')">2</button>
+        <button onclick="calcInput('3')">3</button>
+        <button onclick="calcInput('-')">-</button>
+        <button onclick="calcClear()">C</button>
+        <button onclick="calcInput('0')">0</button>
+        <button onclick="calcResult()">=</button>
+        <button onclick="calcInput('+')">+</button>
+      </div>
+      <button onclick="toggleCalc()" class="secondary" style="margin-top: 10px; width: 100%;">بند کریں</button>
+    </div>
+  </div>
 
-<!-- Supabase Library -->
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script>
-  const SUPABASE_URL = "https://lsjafuxasaijybhbopjf.supabase.co";
-  const SUPABASE_KEY = "sb_publishable_l0Y4PJksE_y9Y0ttNMSA1Q_W8XVxoAS";
-  const supabaseClient = window.supabase.createClient(
-    SUPABASE_URL,
-    SUPABASE_KEY
-  );
-
-  let currentUserId = null;
-
-  // ایپ لوڈ ہوتے ہی سیشن چیک کریں
-  async function checkUserSession() {
-    const { data: { session } } = await supabaseClient.auth.getSession();
-    if (session) {
-      currentUserId = session.user.id;
-      showDashboard(session.user);
-      loadCustomers();
+  // کیلکولیٹر فنکشنز
+  function toggleCalc() {
+    const modal = document.getElementById('calcModal');
+    modal.style.display = (modal.style.display === 'flex') ? 'none' : 'flex';
+  }
+  function calcInput(val) {
+    document.getElementById('calcDisplay').value += val;
+  }
+  function calcClear() {
+    document.getElementById('calcDisplay').value = '';
+  }
+  function calcResult() {
+    try {
+      document.getElementById('calcDisplay').value = eval(document.getElementById('calcDisplay').value);
+    } catch {
+      document.getElementById('calcDisplay').value = 'Error';
     }
   }
-  checkUserSession();
 
-  function showDashboard(user) {
-    currentUserId = user.id;
-    document.getElementById("register").hidden = true;
-    document.getElementById("login").hidden = true;
-    document.getElementById("dashboard").hidden = false;
-
-    const ownerName = user?.user_metadata?.owner_name;
-    const shopName = user?.user_metadata?.shop_name;
-
-    const dashboardHeading = document.querySelector("#dashboard h2");
-    dashboardHeading.textContent = shopName ? shopName + " — ڈیش بورڈ" : "دکاندار کا ڈیش بورڈ";
-
-    const welcomeText = document.querySelector("#dashboard > p");
-    welcomeText.textContent = ownerName ? "خوش آمدید، " + ownerName + " صاحب!" : "میرا حساب میں خوش آمدید!";
+  // PDF ڈاؤن لوڈ کا فنکشن
+  function generatePDF(customerName, balance) {
+    const element = document.createElement('div');
+    element.innerHTML = `
+      <div style="padding: 20px; font-family: Tahoma; direction: rtl; text-align: right;">
+        <h1 style="color: #116149;">میرا حساب — کھاتہ رسید</h1>
+        <hr>
+        <h3>گاہک کا نام: ${customerName}</h3>
+        <h3>کل بقایا واجب الادا رقم: <span style="color: red;">${balance} روپے</span></h3>
+        <p>تاریخ: ${new Date().toLocaleDateString('ur-PK')}</p>
+        <br>
+        <p>شکریہ! براہ کرم وقت پر ادائیگی کریں۔</p>
+      </div>
+    `;
+    html2pdf().from(element).save(`${customerName}_Khata_Receipt.pdf`);
   }
-
-  // رجسٹریشن فارم ہینڈلر
-  const registerForm = document.getElementById("registerForm");
-  const registerMessage = document.getElementById("registerMessage");
-
-  registerForm.addEventListener("submit", async function (event) {
-    event.preventDefault();
-
-    const ownerName = document.getElementById("ownerName").value.trim();
-    const shopName = document.getElementById("shopName").value.trim();
-    const mobile = document.getElementById("mobile").value.trim();
-    const email = document.getElementById("email").value.trim();
-    const password = document.getElementById("password").value;
-
-    const submitButton = registerForm.querySelector('button[type="submit"]');
-    submitButton.disabled = true;
-    registerMessage.textContent = "اکاؤنٹ بنایا جا رہا ہے، انتظار کریں...";
-
-    try {
-      const { data, error } = await supabaseClient.auth.signUp({
-        email: email,
-        password: password,
-        options: {
-          data: { owner_name: ownerName, shop_name: shopName, mobile: mobile }
-        }
-      });
-
-      if (error) throw error;
-
-      if (data.session) {
-        registerMessage.textContent = "اکاؤنٹ کامیابی سے بن گیا!";
-        showDashboard(data.session.user);
-        loadCustomers();
-      } else {
-        registerMessage.textContent = "اکاؤنٹ بن گیا ہے! براہ کرم لاگ ان کریں۔";
-      }
-      registerForm.reset();
-    } catch (error) {
-      registerMessage.textContent = "خامی: " + error.message;
-    } finally {
-      submitButton.disabled = false;
-    }
-  });
-  
-  // لاگ ان فارم ہینڈلر
-  const loginForm = document.getElementById("loginForm");
-  const loginMessage = document.getElementById("loginMessage");
-
-  loginForm.addEventListener("submit", async function (event) {
-    event.preventDefault();
-
-    const email = document.getElementById("loginEmail").value.trim();
-    const password = document.getElementById("loginPassword").value;
-    const submitButton = loginForm.querySelector('button[type="submit"]');
-
-    submitButton.disabled = true;
-    loginMessage.textContent = "لاگ اِن ہو رہا ہے...";
-
-    try {
-      const { data, error } = await supabaseClient.auth.signInWithPassword({
-        email: email,
-        password: password
-      });
-
-      if (error) throw error;
-
-      loginMessage.textContent = "لاگ اِن کامیاب!";
-      showDashboard(data.user);
-      loadCustomers();
-    } catch (error) {
-      loginMessage.textContent = "لاگ اِن ناکام: " + error.message;
-    } finally {
-      submitButton.disabled = false;
-    }
-  });
-
-  // گاہک اور لین دین محفوظ کرنے کا فنکشن (مقامی طور پر براؤزر میں ٹیسٹ کے لیے یا Supabase ٹیبل کے لیے)
-  const customerForm = document.getElementById("customerForm");
-  const customerMessage = document.getElementById("customerMessage");
-
-  // عارضی طور پر گاہکوں کا ڈیٹا براؤزر کی میموری (LocalStorage) میں محفوظ کرنے کا نظام تاکہ آپ فورا ٹیسট کر سکیں
-  customerForm.addEventListener("submit", function(e) {
-    e.preventDefault();
-    
-    const name = document.getElementById("customerName").value.trim();
-    const phone = document.getElementById("customerPhone").value.trim();
-    const amount = parseFloat(document.getElementById("amount").value) || 0;
-    const type = document.getElementById("txnType").value;
-
-    let netAmount = type === 'credit' ? amount : -amount;
-
-    let customers = JSON.parse(localStorage.getItem('mera_hisab_customers_' + currentUserId) || '[]');
-    
-    // چیک کریں کیا گاہک پہلے سے موجود ہے
-    let existing = customers.find(c => c.name === name);
-    if (existing) {
-      existing.balance += netAmount;
-      if(phone) existing.phone = phone;
-    } else {
-      customers.push({ name: name, phone: phone || '---', balance: netAmount });
-    }
-
-    localStorage.setItem('mera_hisab_customers_' + currentUserId, JSON.stringify(customers));
-    
-    customerMessage.textContent = "حساب کامیابی سے محفوظ ہو گیا!";
-    customerForm.reset();
-    loadCustomers();
-
-    setTimeout(() => { customerMessage.textContent = ""; }, 3000);
-  });
-
-  function loadCustomers() {
-    let customers = JSON.parse(localStorage.getItem('mera_hisab_customers_' + currentUserId) || '[]');
-    const tbody = document.getElementById("customerTableBody");
-    const totalCustomersEl = document.getElementById("totalCustomers");
-    const totalBalanceEl = document.getElementById("totalBalance");
-
-    tbody.innerHTML = "";
-    let totalBal = 0;
-
-    if (customers.length === 0) {
-      tbody.innerHTML = `<tr><td colspan="3" style="text-align: center; color: #60776d;">ابھی تک کوئی گاہک درج نہیں کیا۔</td></tr>`;
-      totalCustomersEl.textContent = "0";
-      totalBalanceEl.textContent = "0 روپے";
-      return;
-    }
-
-    customers.forEach(cust => {
-      totalBal += cust.balance;
-      let tr = document.createElement("tr");
-      tr.innerHTML = `
-        <td>${cust.name}</td>
-        <td>${cust.phone}</td>
-        <td style="color: ${cust.balance > 0 ? '#b33939' : '#218c74'}; font-weight: bold;">${cust.balance} روپے</td>
-      `;
-      tbody.appendChild(tr);
-    });
-
-    totalCustomersEl.textContent = customers.length;
-    totalBalanceEl.textContent = totalBal + " روپے";
-  }
-
-  // لاگ آؤٹ ہینڈلر
-  const logoutButton = document.getElementById("logoutButton");
-  logoutButton.addEventListener("click", async function () {
-    try {
-      await supabaseClient.auth.signOut();
-      currentUserId = null;
-      document.getElementById("dashboard").hidden = true;
-      document.getElementById("register").hidden = false;
-      document.getElementById("login").hidden = false;
-      loginForm.reset();
-      registerForm.reset();
-      loginMessage.textContent = "آپ لاگ آؤٹ ہو گئے ہیں۔";
-    } catch (error) {
-      console.error(error);
-    }
-  });
 </script>
 </body>
 </html>
-
