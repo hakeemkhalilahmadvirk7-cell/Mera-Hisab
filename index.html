@@ -117,6 +117,13 @@
       color: #60776d;
       font-size: 13px;
     }
+    .dashboard-summary {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+      gap: 12px;
+      margin-top: 15px;
+      margin-bottom: 15px;
+    }
   </style>
 </head>
 <body>
@@ -130,14 +137,6 @@
     <section class="card">
       <h2>خوش آمدید!</h2>
       <p>اپنے کاروبار کا ادھار، وصولیاں اور بقایا حساب منظم کرنے کے لیے ایک آسان ڈیجیٹل نظام۔</p>
-      <div class="actions">
-        <button onclick="showMessage('دکاندار کا اکاؤنٹ بنانے کی سہولت اگلے مرحلے میں شامل ہوگی۔')">
-          دکاندار
-        </button>
-        <button class="secondary" onclick="showMessage('گاہک کا اکاؤنٹ بنانے کی سہولت اگلے مرحلے میں شامل ہوگی۔')">
-          گاہک
-        </button>
-      </div>
     </section>
 
     <section class="card">
@@ -148,9 +147,7 @@
       <p>✓ اردو اور انگریزی کے لیے منصوبہ</p>
     </section>
 
-    <section class="card">
-     
-    
+    <!-- دکاندار کا اکاؤنٹ بنانے کا فارم -->
     <section class="card" id="register">
       <h2>دکاندار کا اکاؤنٹ بنائیں</h2>
       <p>میرا حساب پر اپنا اکاؤنٹ بنائیں۔</p>
@@ -177,6 +174,7 @@
       <p id="registerMessage" role="status"></p>
     </section>
 
+    <!-- دکاندار لاگ ان کا فارم -->
     <section class="card" id="login">
       <h2>دکاندار لاگ اِن کریں</h2>
       <p>اپنے اکاؤنٹ میں داخل ہونے کے لیے ای میل اور پاس ورڈ درج کریں۔</p>
@@ -194,36 +192,37 @@
       <p id="loginMessage" role="status"></p>
     </section>
 
+    <!-- دکاندار کا ڈیش بورڈ -->
     <section class="card" id="dashboard" hidden>
       <h2>دکاندار کا ڈیش بورڈ</h2>
-
       <p>میرا حساب میں خوش آمدید!</p>
 
       <div class="dashboard-summary">
-        <div class="card">
+        <div class="card" style="margin-bottom:0;">
           <h3>کل گاہک</h3>
           <p id="totalCustomers">0</p>
         </div>
 
-        <div class="card">
+        <div class="card" style="margin-bottom:0;">
           <h3>کل ادھار</h3>
           <p id="totalCredit">0 روپے</p>
         </div>
 
-        <div class="card">
+        <div class="card" style="margin-bottom:0;">
           <h3>وصول شدہ رقم</h3>
           <p id="totalReceived">0 روپے</p>
         </div>
 
-        <div class="card">
+        <div class="card" style="margin-bottom:0;">
           <h3>بقایا رقم</h3>
           <p id="totalBalance">0 روپے</p>
         </div>
       </div>
 
-      <button type="button" id="logoutButton">لاگ آؤٹ کریں</button>
+      <button type="button" id="logoutButton" style="margin-top: 15px;">لاگ آؤٹ کریں</button>
     </section>
 
+    <section class="card">
       <h2>ہمارا مقصد</h2>
       <p>پاکستان کے دکانداروں اور گاہکوں کے لیے حساب کتاب کو آسان، واضح اور منظم بنانا۔</p>
       <div class="notice">
@@ -234,15 +233,38 @@
 
   <footer>© 2026 میرا حساب — Mera Hisab</footer>
 
- 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script>
   const SUPABASE_URL = "https://lsjafuxasaijybhbopjf.supabase.co";
-    const SUPABASE_KEY = "sb_publishable_l0Y4PJksE_y9Y0ttNMSA1Q_W8XVxoAS";
-    supabaseClient = window.supabase.createClient(
+  const SUPABASE_KEY = "sb_publishable_l0Y4PJksE_y9Y0ttNMSA1Q_W8XVxoAS";
+  const supabaseClient = window.supabase.createClient(
     SUPABASE_URL,
     SUPABASE_KEY
   );
+
+  // ایپ لوڈ ہوتے ہی چیک کریں کہ آیا صارف پہلے سے لاگ ان ہے یا نہیں
+  async function checkUserSession() {
+    const { data: { session } } = await supabaseClient.auth.getSession();
+    if (session) {
+      showDashboard(session.user);
+    }
+  }
+  checkUserSession();
+
+  function showDashboard(user) {
+    document.getElementById("register").hidden = true;
+    document.getElementById("login").hidden = true;
+    document.getElementById("dashboard").hidden = false;
+
+    const ownerName = user?.user_metadata?.owner_name;
+    const shopName = user?.user_metadata?.shop_name;
+
+    const dashboardHeading = document.querySelector("#dashboard h2");
+    dashboardHeading.textContent = shopName ? shopName + " — ڈیش بورڈ" : "دکاندار کا ڈیش بورڈ";
+
+    const welcomeText = document.querySelector("#dashboard > p");
+    welcomeText.textContent = ownerName ? "خوش آمدید، " + ownerName + " صاحب!" : "میرا حساب میں خوش آمدید!";
+  }
 
   const registerForm = document.getElementById("registerForm");
   const registerMessage = document.getElementById("registerMessage");
@@ -256,9 +278,7 @@
     const email = document.getElementById("email").value.trim();
     const password = document.getElementById("password").value;
 
-    const submitButton = registerForm.querySelector(
-      'button[type="submit"]'
-    );
+    const submitButton = registerForm.querySelector('button[type="submit"]');
 
     submitButton.disabled = true;
     registerMessage.textContent = "اکاؤنٹ بنایا جا رہا ہے، انتظار کریں۔";
@@ -279,17 +299,15 @@
       if (error) throw error;
 
       if (data.user && !data.session) {
-        registerMessage.textContent =
-          "اکاؤنٹ کی درخواست کامیاب ہے۔ براہ کرم اپنی ای میل کھول کر تصدیق کریں۔";
+        registerMessage.textContent = "اکاؤنٹ کی درخواست کامیاب ہے۔ براہ کرم اپنی ای میل کھول کر تصدیق کریں۔";
       } else {
-        registerMessage.textContent =
-          "اکاؤنٹ بن گیا ہے۔ اب اگلے مرحلے میں پروفائل مکمل کریں گے۔";
+        registerMessage.textContent = "اکاؤنٹ بن گیا ہے!";
+        if (data.session) showDashboard(data.session.user);
       }
 
       registerForm.reset();
     } catch (error) {
-      registerMessage.textContent =
-        "اکاؤنٹ نہیں بن سکا: " + error.message;
+      registerMessage.textContent = "اکاؤنٹ نہیں بن سکا: " + error.message;
     } finally {
       submitButton.disabled = false;
     }
@@ -317,28 +335,9 @@
       if (error) throw error;
 
       loginMessage.textContent = "لاگ اِن کامیاب ہو گیا ہے۔";
-
-      document.getElementById("register").hidden = true;
-      document.getElementById("login").hidden = true;
-      document.getElementById("dashboard").hidden = false;
-
-      const { data: userData } = await supabaseClient.auth.getUser();
-
-      const ownerName = userData.user?.user_metadata?.owner_name;
-      const shopName = userData.user?.user_metadata?.shop_name;
-
-      const dashboardHeading = document.querySelector("#dashboard h2");
-      dashboardHeading.textContent =
-        shopName ? shopName + " — ڈیش بورڈ" : "دکاندار کا ڈیش بورڈ";
-
-      const welcomeText = document.querySelector("#dashboard > p");
-      welcomeText.textContent =
-        ownerName ? "خوش آمدید، " + ownerName + " صاحب!" : "میرا حساب میں خوش آمدید!";
-
-      // اگلے مرحلے میں یہاں دکاندار کا ڈیش بورڈ کھولیں گے۔
+      showDashboard(data.user);
     } catch (error) {
-      loginMessage.textContent =
-        "لاگ اِن نہیں ہو سکا: " + error.message;
+      loginMessage.textContent = "لاگ اِن نہیں ہو سکا: " + error.message;
     } finally {
       submitButton.disabled = false;
     }
@@ -351,22 +350,21 @@
 
     try {
       const { error } = await supabaseClient.auth.signOut();
-
       if (error) throw error;
 
+      // ڈیش بورڈ چھپائیں اور لاگ ان و رجسٹریشن فارಮ್ دوبارہ دکھائیں
       document.getElementById("dashboard").hidden = true;
+      document.getElementById("register").hidden = false;
       document.getElementById("login").hidden = false;
 
       loginForm.reset();
       loginMessage.textContent = "آپ کامیابی سے لاگ آؤٹ ہو گئے ہیں۔";
     } catch (error) {
-      loginMessage.textContent =
-        "لاگ آؤٹ نہیں ہو سکا: " + error.message;
+      loginMessage.textContent = "لاگ آؤٹ نہیں ہو سکا: " + error.message;
     } finally {
       logoutButton.disabled = false;
     }
   });
-
 </script>
 </body>
 </html>
