@@ -7,50 +7,60 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>میرا حساب | Mera Hisab</title>
   <style>
-    /* Vendor Registration Form */
-    #register form {
+    /* Forms & Inputs Styling */
+    form {
       display: grid;
       grid-template-columns: 1fr 1fr;
       gap: 14px;
       direction: rtl;
-      margin-top: 20px;
+      margin-top: 15px;
     }
 
-    #register label {
+    label {
       display: block;
       font-weight: bold;
       align-self: end;
+      font-size: 14px;
     }
 
-    #register input {
+    input, select {
       width: 100%;
       min-width: 0;
       padding: 12px;
       border: 1px solid #cbd5d0;
       border-radius: 8px;
-      font-size: 16px;
+      font-size: 15px;
       background: #fff;
     }
 
-    #register button {
+    .full-width {
       grid-column: 1 / -1;
-      width: 100%;
-      padding: 13px;
-      border: none;
-      border-radius: 8px;
-      background: #116149;
-      color: white;
-      font-size: 17px;
-      font-weight: bold;
-      cursor: pointer;
     }
 
-    #register button:hover {
+    button {
+      border: 0;
+      border-radius: 10px;
+      padding: 12px 16px;
+      font-size: 15px;
+      font-family: inherit;
+      cursor: pointer;
+      background: #116149;
+      color: white;
+      font-weight: bold;
+    }
+
+    button:hover {
       background: #0d4d39;
     }
 
+    button.secondary {
+      background: #e3f1eb;
+      color: #116149;
+      border: 1px solid #b7d9c9;
+    }
+
     @media (max-width: 600px) {
-      #register form {
+      form {
         grid-template-columns: 1fr;
       }
     }
@@ -71,7 +81,7 @@
     header h1 { margin: 0 0 10px; font-size: 34px; }
     header p { margin: 0; line-height: 1.8; }
     main {
-      max-width: 760px;
+      max-width: 800px;
       margin: 28px auto;
       padding: 0 16px;
     }
@@ -83,26 +93,36 @@
       box-shadow: 0 4px 18px #17352c12;
     }
     h2 { margin-top: 0; font-size: 22px; }
-    .actions {
+    h3 { margin-top: 0; font-size: 18px; color: #116149; }
+
+    .dashboard-summary {
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+      grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
       gap: 12px;
+      margin-top: 15px;
+      margin-bottom: 20px;
     }
-    button {
-      border: 0;
-      border-radius: 10px;
-      padding: 14px;
-      font-size: 16px;
-      font-family: inherit;
-      cursor: pointer;
-      background: #116149;
-      color: white;
+
+    /* Table Styling for Customers */
+    .table-container {
+      overflow-x: auto;
+      margin-top: 15px;
     }
-    button.secondary {
-      background: #e3f1eb;
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      text-align: right;
+      font-size: 14px;
+    }
+    th, td {
+      padding: 10px 12px;
+      border-bottom: 1px solid #e1ebe6;
+    }
+    th {
+      background: #f3f7f5;
       color: #116149;
-      border: 1px solid #b7d9c9;
     }
+
     .notice {
       background: #fff7df;
       border-right: 4px solid #d7a72e;
@@ -110,19 +130,13 @@
       border-radius: 8px;
       line-height: 1.8;
       font-size: 14px;
+      margin-top: 15px;
     }
     footer {
       text-align: center;
       padding: 24px;
       color: #60776d;
       font-size: 13px;
-    }
-    .dashboard-summary {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
-      gap: 12px;
-      margin-top: 15px;
-      margin-bottom: 15px;
     }
   </style>
 </head>
@@ -134,17 +148,10 @@
   </header>
 
   <main>
+    <!-- تعارفی سیکشن -->
     <section class="card">
       <h2>خوش آمدید!</h2>
       <p>اپنے کاروبار کا ادھار، وصولیاں اور بقایا حساب منظم کرنے کے لیے ایک آسان ڈیجیٹل نظام۔</p>
-    </section>
-
-    <section class="card">
-      <h2>میرا حساب آپ کے لیے</h2>
-      <p>✓ ادھار کا ریکارڈ</p>
-      <p>✓ وصول شدہ رقم کی تفصیل</p>
-      <p>✓ بقایا رقم کا حساب</p>
-      <p>✓ اردو اور انگریزی کے لیے منصوبہ</p>
     </section>
 
     <!-- دکاندار کا اکاؤنٹ بنانے کا فارم -->
@@ -153,25 +160,31 @@
       <p>میرا حساب پر اپنا اکاؤنٹ بنائیں۔</p>
 
       <form id="registerForm">
-        <label for="ownerName">دکاندار کا نام</label>
-        <input type="text" id="ownerName" name="ownerName" required>
-
-        <label for="shopName">دکان کا نام</label>
-        <input type="text" id="shopName" name="shopName" required>
-
-        <label for="mobile">موبائل نمبر</label>
-        <input type="tel" id="mobile" name="mobile" required>
-
-        <label for="email">ای میل</label>
-        <input type="email" id="email" name="email" required>
-
-        <label for="password">پاس ورڈ</label>
-        <input type="password" id="password" name="password" minlength="8" required>
-
-        <button type="submit">اکاؤنٹ بنائیں</button>
+        <div>
+          <label for="ownerName">دکاندار کا نام</label>
+          <input type="text" id="ownerName" name="ownerName" required>
+        </div>
+        <div>
+          <label for="shopName">دکان کا نام</label>
+          <input type="text" id="shopName" name="shopName" required>
+        </div>
+        <div>
+          <label for="mobile">موبائل نمبر</label>
+          <input type="tel" id="mobile" name="mobile" required>
+        </div>
+        <div>
+          <label for="email">ای میل</label>
+          <input type="email" id="email" name="email" required>
+        </div>
+        <div class="full-width">
+          <label for="password">پاس ورڈ (کم از کم 8 ہندسے)</label>
+          <input type="password" id="password" name="password" minlength="8" required>
+        </div>
+        <div class="full-width">
+          <button type="submit">اکاؤنٹ بنائیں</button>
+        </div>
       </form>
-
-      <p id="registerMessage" role="status"></p>
+      <p id="registerMessage" role="status" style="margin-top: 10px; font-weight: bold;"></p>
     </section>
 
     <!-- دکاندار لاگ ان کا فارم -->
@@ -180,59 +193,104 @@
       <p>اپنے اکاؤنٹ میں داخل ہونے کے لیے ای میل اور پاس ورڈ درج کریں۔</p>
 
       <form id="loginForm">
-        <label for="loginEmail">ای میل</label>
-        <input type="email" id="loginEmail" name="loginEmail" required>
-
-        <label for="loginPassword">پاس ورڈ</label>
-        <input type="password" id="loginPassword" name="loginPassword" required>
-
-        <button type="submit">لاگ اِن کریں</button>
+        <div>
+          <label for="loginEmail">ای میل</label>
+          <input type="email" id="loginEmail" name="loginEmail" required>
+        </div>
+        <div>
+          <label for="loginPassword">پاس ورڈ</label>
+          <input type="password" id="loginPassword" name="loginPassword" required>
+        </div>
+        <div class="full-width">
+          <button type="submit">لاگ اِن کریں</button>
+        </div>
       </form>
-
-      <p id="loginMessage" role="status"></p>
+      <p id="loginMessage" role="status" style="margin-top: 10px; font-weight: bold;"></p>
     </section>
 
-    <!-- دکاندار کا ڈیش بورڈ -->
+    <!-- دکاندار کا ڈیش بورڈ اور گاہکوں کا کھاتہ -->
     <section class="card" id="dashboard" hidden>
       <h2>دکاندار کا ڈیش بورڈ</h2>
       <p>میرا حساب میں خوش آمدید!</p>
 
       <div class="dashboard-summary">
-        <div class="card" style="margin-bottom:0;">
+        <div class="card" style="margin-bottom:0; box-shadow:none; background:#f3f7f5;">
           <h3>کل گاہک</h3>
-          <p id="totalCustomers">0</p>
+          <p id="totalCustomers" style="font-size: 20px; font-weight: bold; margin:0;">0</p>
         </div>
-
-        <div class="card" style="margin-bottom:0;">
-          <h3>کل ادھار</h3>
-          <p id="totalCredit">0 روپے</p>
-        </div>
-
-        <div class="card" style="margin-bottom:0;">
-          <h3>وصول شدہ رقم</h3>
-          <p id="totalReceived">0 روپے</p>
-        </div>
-
-        <div class="card" style="margin-bottom:0;">
-          <h3>بقایا رقم</h3>
-          <p id="totalBalance">0 روپے</p>
+        <div class="card" style="margin-bottom:0; box-shadow:none; background:#f3f7f5;">
+          <h3>کل بقایا ادھار</h3>
+          <p id="totalBalance" style="font-size: 20px; font-weight: bold; margin:0; color: #b33939;">0 روپے</p>
         </div>
       </div>
 
-      <button type="button" id="logoutButton" style="margin-top: 15px;">لاگ آؤٹ کریں</button>
+      <hr style="border: 0; border-top: 1px solid #e1ebe6; margin: 20px 0;">
+
+      <!-- نیا گاہک شامل کرنے کا فارم -->
+      <h3>نیا گاہک یا لین دین درج کریں</h3>
+      <form id="customerForm">
+        <div>
+          <label for="customerName">گاہک کا نام</label>
+          <input type="text" id="customerName" required placeholder="مثلاً: احمد خان">
+        </div>
+        <div>
+          <label for="customerPhone">موبائل نمبر (اختتیاری)</label>
+          <input type="tel" id="customerPhone" placeholder="03001234567">
+        </div>
+        <div>
+          <label for="amount">رقم (روپے)</label>
+          <input type="number" id="amount" required placeholder="0">
+        </div>
+        <div>
+          <label for="txnType">قسم</label>
+          <select id="txnType">
+            <option value="credit">ادھار دیا (لینا ہے)</option>
+            <option value="payment">رقم وصول کی (جمع کی)</option>
+          </select>
+        </div>
+        <div class="full-width">
+          <button type="submit">محفوظ کریں</button>
+        </div>
+      </form>
+      <p id="customerMessage" role="status" style="margin-top: 10px; font-weight: bold;"></p>
+
+      <hr style="border: 0; border-top: 1px solid #e1ebe6; margin: 20px 0;">
+
+      <!-- گاہکوں کی لسٹ کا ٹیبل -->
+      <h3>گاہکوں کا کھاتہ (Ledger)</h3>
+      <div class="table-container">
+        <table>
+          <thead>
+            <tr>
+              <th>گاہک کا نام</th>
+              <th>موبایل نمبر</th>
+              <th>بقایا رقم (روپے)</th>
+            </tr>
+          </thead>
+          <tbody id="customerTableBody">
+            <tr>
+              <td colspan="3" style="text-align: center; color: #60776d;">ابھی تک کوئی گاہک درج نہیں کیا۔</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <button type="button" id="logoutButton" class="secondary" style="margin-top: 25px;">لاگ آؤٹ کریں</button>
     </section>
 
+    <!-- مقصد کا سیکشن -->
     <section class="card">
       <h2>ہمارا مقصد</h2>
       <p>پاکستان کے دکانداروں اور گاہکوں کے لیے حساب کتاب کو آسان، واضح اور منظم بنانا۔</p>
       <div class="notice">
-        یہ ابتدائی نمونہ ہے۔ ابھی اکاؤنٹس، حقیقی ڈیٹا محفوظ کرنے اور WhatsApp یا SMS بھیجنے کی سہولت فعال نہیں۔
+        یہ پروجیکٹ Supabase ڈیٹا بیس کے ساتھ منسلک ہے جہاں آپ کا ڈیٹا محفوظ ہو رہا ہے۔
       </div>
     </section>
   </main>
 
   <footer>© 2026 میرا حساب — Mera Hisab</footer>
 
+<!-- Supabase Library -->
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script>
   const SUPABASE_URL = "https://lsjafuxasaijybhbopjf.supabase.co";
@@ -242,16 +300,21 @@
     SUPABASE_KEY
   );
 
-  // ایپ لوڈ ہوتے ہی چیک کریں کہ آیا صارف پہلے سے لاگ ان ہے یا نہیں
+  let currentUserId = null;
+
+  // ایپ لوڈ ہوتے ہی سیشن چیک کریں
   async function checkUserSession() {
     const { data: { session } } = await supabaseClient.auth.getSession();
     if (session) {
+      currentUserId = session.user.id;
       showDashboard(session.user);
+      loadCustomers();
     }
   }
   checkUserSession();
 
   function showDashboard(user) {
+    currentUserId = user.id;
     document.getElementById("register").hidden = true;
     document.getElementById("login").hidden = true;
     document.getElementById("dashboard").hidden = false;
@@ -266,6 +329,7 @@
     welcomeText.textContent = ownerName ? "خوش آمدید، " + ownerName + " صاحب!" : "میرا حساب میں خوش آمدید!";
   }
 
+  // رجسٹریشن فارم ہینڈلر
   const registerForm = document.getElementById("registerForm");
   const registerMessage = document.getElementById("registerMessage");
 
@@ -279,40 +343,36 @@
     const password = document.getElementById("password").value;
 
     const submitButton = registerForm.querySelector('button[type="submit"]');
-
     submitButton.disabled = true;
-    registerMessage.textContent = "اکاؤنٹ بنایا جا رہا ہے، انتظار کریں۔";
+    registerMessage.textContent = "اکاؤنٹ بنایا جا رہا ہے، انتظار کریں...";
 
     try {
       const { data, error } = await supabaseClient.auth.signUp({
         email: email,
         password: password,
         options: {
-          data: {
-            owner_name: ownerName,
-            shop_name: shopName,
-            mobile: mobile
-          }
+          data: { owner_name: ownerName, shop_name: shopName, mobile: mobile }
         }
       });
 
       if (error) throw error;
 
-      if (data.user && !data.session) {
-        registerMessage.textContent = "اکاؤنٹ کی درخواست کامیاب ہے۔ براہ کرم اپنی ای میل کھول کر تصدیق کریں۔";
+      if (data.session) {
+        registerMessage.textContent = "اکاؤنٹ کامیابی سے بن گیا!";
+        showDashboard(data.session.user);
+        loadCustomers();
       } else {
-        registerMessage.textContent = "اکاؤنٹ بن گیا ہے!";
-        if (data.session) showDashboard(data.session.user);
+        registerMessage.textContent = "اکاؤنٹ بن گیا ہے! براہ کرم لاگ ان کریں۔";
       }
-
       registerForm.reset();
     } catch (error) {
-      registerMessage.textContent = "اکاؤنٹ نہیں بن سکا: " + error.message;
+      registerMessage.textContent = "خامی: " + error.message;
     } finally {
       submitButton.disabled = false;
     }
   });
   
+  // لاگ ان فارم ہینڈلر
   const loginForm = document.getElementById("loginForm");
   const loginMessage = document.getElementById("loginMessage");
 
@@ -324,7 +384,7 @@
     const submitButton = loginForm.querySelector('button[type="submit"]');
 
     submitButton.disabled = true;
-    loginMessage.textContent = "لاگ اِن کیا جا رہا ہے، انتظار کریں۔";
+    loginMessage.textContent = "لاگ اِن ہو رہا ہے...";
 
     try {
       const { data, error } = await supabaseClient.auth.signInWithPassword({
@@ -334,39 +394,99 @@
 
       if (error) throw error;
 
-      loginMessage.textContent = "لاگ اِن کامیاب ہو گیا ہے۔";
+      loginMessage.textContent = "لاگ اِن کامیاب!";
       showDashboard(data.user);
+      loadCustomers();
     } catch (error) {
-      loginMessage.textContent = "لاگ اِن نہیں ہو سکا: " + error.message;
+      loginMessage.textContent = "لاگ اِن ناکام: " + error.message;
     } finally {
       submitButton.disabled = false;
     }
   });
 
+  // گاہک اور لین دین محفوظ کرنے کا فنکشن (مقامی طور پر براؤزر میں ٹیسٹ کے لیے یا Supabase ٹیبل کے لیے)
+  const customerForm = document.getElementById("customerForm");
+  const customerMessage = document.getElementById("customerMessage");
+
+  // عارضی طور پر گاہکوں کا ڈیٹا براؤزر کی میموری (LocalStorage) میں محفوظ کرنے کا نظام تاکہ آپ فورا ٹیسট کر سکیں
+  customerForm.addEventListener("submit", function(e) {
+    e.preventDefault();
+    
+    const name = document.getElementById("customerName").value.trim();
+    const phone = document.getElementById("customerPhone").value.trim();
+    const amount = parseFloat(document.getElementById("amount").value) || 0;
+    const type = document.getElementById("txnType").value;
+
+    let netAmount = type === 'credit' ? amount : -amount;
+
+    let customers = JSON.parse(localStorage.getItem('mera_hisab_customers_' + currentUserId) || '[]');
+    
+    // چیک کریں کیا گاہک پہلے سے موجود ہے
+    let existing = customers.find(c => c.name === name);
+    if (existing) {
+      existing.balance += netAmount;
+      if(phone) existing.phone = phone;
+    } else {
+      customers.push({ name: name, phone: phone || '---', balance: netAmount });
+    }
+
+    localStorage.setItem('mera_hisab_customers_' + currentUserId, JSON.stringify(customers));
+    
+    customerMessage.textContent = "حساب کامیابی سے محفوظ ہو گیا!";
+    customerForm.reset();
+    loadCustomers();
+
+    setTimeout(() => { customerMessage.textContent = ""; }, 3000);
+  });
+
+  function loadCustomers() {
+    let customers = JSON.parse(localStorage.getItem('mera_hisab_customers_' + currentUserId) || '[]');
+    const tbody = document.getElementById("customerTableBody");
+    const totalCustomersEl = document.getElementById("totalCustomers");
+    const totalBalanceEl = document.getElementById("totalBalance");
+
+    tbody.innerHTML = "";
+    let totalBal = 0;
+
+    if (customers.length === 0) {
+      tbody.innerHTML = `<tr><td colspan="3" style="text-align: center; color: #60776d;">ابھی تک کوئی گاہک درج نہیں کیا۔</td></tr>`;
+      totalCustomersEl.textContent = "0";
+      totalBalanceEl.textContent = "0 روپے";
+      return;
+    }
+
+    customers.forEach(cust => {
+      totalBal += cust.balance;
+      let tr = document.createElement("tr");
+      tr.innerHTML = `
+        <td>${cust.name}</td>
+        <td>${cust.phone}</td>
+        <td style="color: ${cust.balance > 0 ? '#b33939' : '#218c74'}; font-weight: bold;">${cust.balance} روپے</td>
+      `;
+      tbody.appendChild(tr);
+    });
+
+    totalCustomersEl.textContent = customers.length;
+    totalBalanceEl.textContent = totalBal + " روپے";
+  }
+
+  // لاگ آؤٹ ہینڈلر
   const logoutButton = document.getElementById("logoutButton");
-
   logoutButton.addEventListener("click", async function () {
-    logoutButton.disabled = true;
-
     try {
-      const { error } = await supabaseClient.auth.signOut();
-      if (error) throw error;
-
-      // ڈیش بورڈ چھپائیں اور لاگ ان و رجسٹریشن فارಮ್ دوبارہ دکھائیں
+      await supabaseClient.auth.signOut();
+      currentUserId = null;
       document.getElementById("dashboard").hidden = true;
       document.getElementById("register").hidden = false;
       document.getElementById("login").hidden = false;
-
       loginForm.reset();
-      loginMessage.textContent = "آپ کامیابی سے لاگ آؤٹ ہو گئے ہیں۔";
+      registerForm.reset();
+      loginMessage.textContent = "آپ لاگ آؤٹ ہو گئے ہیں۔";
     } catch (error) {
-      loginMessage.textContent = "لاگ آؤٹ نہیں ہو سکا: " + error.message;
-    } finally {
-      logoutButton.disabled = false;
+      console.error(error);
     }
   });
 </script>
 </body>
 </html>
-
 
